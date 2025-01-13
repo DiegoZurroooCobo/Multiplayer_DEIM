@@ -63,7 +63,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        PhotonNetwork.JoinRandomRoom();
+        //
+       PhotonNetwork.JoinRandomRoom();
        Debug.Log("OnconnectedToMaster fue llamado por el PUN");
     }
 
