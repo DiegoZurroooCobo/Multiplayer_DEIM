@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
 
-public class Launcher : MonoBehaviour
+public class Launcher : MonoBehaviourPunCallbacks
 {
     #region Private Serializable Fields
 
@@ -28,7 +29,7 @@ public class Launcher : MonoBehaviour
 
     private void Start()
     {
-        // llama al metodo Connect al Start
+        // llama al metodo Connect desde el Start
         Connect();
     }
 
@@ -54,6 +55,21 @@ public class Launcher : MonoBehaviour
             PhotonNetwork.ConnectUsingSettings();
             PhotonNetwork.GameVersion = gameVersion;    
         }
+    }
+
+    #endregion
+
+    #region MonoBehaviourPunCallbacks CallBacks 
+
+    public override void OnConnectedToMaster()
+    {
+        PhotonNetwork.JoinRandomRoom();
+       Debug.Log("OnconnectedToMaster fue llamado por el PUN");
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        Debug.LogWarningFormat("OnDisconnected fue llamado por el PUN por la razon {0} ", cause);
     }
 
     #endregion
