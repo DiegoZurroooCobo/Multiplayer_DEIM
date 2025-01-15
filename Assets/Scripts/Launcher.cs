@@ -7,7 +7,10 @@ using Photon.Realtime;
 public class Launcher : MonoBehaviourPunCallbacks
 {
     #region Private Serializable Fields
-
+    [Tooltip("El nuemro maximo de jugadors por room. Cuando la room esta llena, no se podran unir jugadores nuevos, asi que se crea una nueva room")]
+    [SerializeField]
+    private byte maxPlayersPerRoom = 4;
+    
     #endregion
 
     #region Private Fields
@@ -63,14 +66,26 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        //
+        // lo primero que intentamos hcaer es conectarnos a una room ya creada. Si hay una, guay chachi. Si no, nos llamara de vuelta a OnJoinRandomFailed()
        PhotonNetwork.JoinRandomRoom();
        Debug.Log("OnconnectedToMaster fue llamado por el PUN");
     }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        Debug.LogWarningFormat("OnDisconnected fue llamado por el PUN por la razon {0} ", cause);
+        Debug.LogWarningFormat("La conexion fallo :O por la razon ", cause);
+    }
+
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        Debug.Log("Se ha llamado a OnJoinRandomFiled(). No hay rooms aleatorias disponibles, asi que se ha creado una ;)");
+        // fallo al unirse a una room aleatoria. Puede que no exita o que esten llenas. Se crea una nueva 
+        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = maxPlayersPerRoom});
+    }
+
+    public override void OnJoinedRoom()
+    {
+        Debug.Log("OnJoinedRoom() fue llamado por PUN. Ahora este cliente esta en una room :p");
     }
 
     #endregion
