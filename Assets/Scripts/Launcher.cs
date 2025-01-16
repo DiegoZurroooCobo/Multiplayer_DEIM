@@ -6,6 +6,7 @@ using Photon.Realtime;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
+    public GameObject buttonControl /*anti alonso*/, loadingElements;
     #region Private Serializable Fields
     [Tooltip("El nuemro maximo de jugadors por room. Cuando la room esta llena, no se podran unir jugadores nuevos, asi que se crea una nueva room")]
     [SerializeField]
@@ -32,8 +33,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        // llama al metodo Connect desde el Start
-        Connect();
+        loadingElements.SetActive(false);
+        buttonControl.SetActive(true);
     }
 
     #endregion
@@ -44,6 +45,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     // si no esta conectado ya, conecta esta aplicacion con Photon Cloud Network
     public void Connect() 
     {
+        loadingElements.SetActive(true);
+        buttonControl.SetActive(false);
         // comprueba si estamos conectados o no, nos unimos si estamos conectados,
         // e iniciamos la conexion al servidor
         if (PhotonNetwork.IsConnected)
